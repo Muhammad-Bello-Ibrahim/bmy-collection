@@ -1,0 +1,26 @@
+export default function Sprite() {
+  return (
+    <svg className="sprite" aria-hidden="true">
+      <symbol id="ic-logo" viewBox="0 0 48 48"><path d="M24 4 L40 24 L24 44 L8 24 Z" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M24 14 L32 24 L24 34 L16 24 Z" fill="none" stroke="currentColor" strokeWidth="1.6" /></symbol>
+      <symbol id="ic-camera" viewBox="0 0 48 48"><rect x="5" y="14" width="38" height="26" rx="3" fill="none" stroke="currentColor" strokeWidth="1.4" /><circle cx="24" cy="27" r="8" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M17 14l2.5-4h9l2.5 4" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></symbol>
+      <symbol id="ic-pin" viewBox="0 0 48 48"><path d="M24 44s14-14.5 14-24a14 14 0 1 0-28 0c0 9.5 14 24 14 24z" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /><circle cx="24" cy="20" r="5" fill="none" stroke="currentColor" strokeWidth="1.3" /></symbol>
+      <symbol id="ic-clock" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M24 14v10l7 5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></symbol>
+      <symbol id="ic-mail" viewBox="0 0 48 48"><rect x="5" y="11" width="38" height="26" rx="2" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M6 13l18 15 18-15" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></symbol>
+      <symbol id="ic-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="1.5" /><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" strokeWidth="1.5" /><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" /></symbol>
+      <symbol id="ic-tiktok" viewBox="0 0 24 24"><path d="M14 3c.4 2.4 2 4 4.6 4.2V10c-1.7 0-3.2-.5-4.6-1.5v6.6a5.1 5.1 0 1 1-4.4-5.1v2.7a2.4 2.4 0 1 0 1.7 2.3V3z" fill="currentColor" /></symbol>
+      <symbol id="ic-fb" viewBox="0 0 24 24"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.25-1.5 1.6-1.5H17V3.7C16.6 3.6 15.5 3.5 14.2 3.5c-2.7 0-4.6 1.7-4.6 4.7v2.7H7v3.1h2.6V21z" fill="currentColor" /></symbol>
+      <symbol id="ic-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></symbol>
+      <symbol id="ic-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></symbol>
+      <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></symbol>
+      <symbol id="ic-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></symbol>
+      <symbol id="ic-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.3 2 4.5 5.7 4c2.3-.3 4.2 1 6.3 3.5C14.1 5 16 3.7 18.3 4c3.7.5 5.3 4.3 3.7 7.7C19.5 16.4 12 21 12 21z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" /></symbol>
+      <symbol id="ic-bag" viewBox="0 0 24 24"><path d="M6 8h12l1 13H5L6 8z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" /><path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" strokeWidth="1.5" /></symbol>
+      <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M20 20l-4.3-4.3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></symbol>
+      <symbol id="ic-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></symbol>
+      <symbol id="ic-minus" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></symbol>
+      <symbol id="ic-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 13a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></symbol>
+      <symbol id="ic-whatsapp" viewBox="0 0 24 24"><path d="M20 4.3A10 10 0 0 0 3.4 16.5L2 22l5.6-1.5A10 10 0 1 0 20 4.3zM12 20a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20z" fill="currentColor" /><path d="M9 8.5c.2-.6.5-.6.8-.6h.6c.2 0 .4 0 .6.5l.7 1.7c.1.2 0 .4-.1.6l-.4.5c-.1.2-.2.3 0 .6.5.9 1.6 2 2.4 2.4.3.1.4.1.6-.1l.5-.6c.2-.2.4-.2.6-.1l1.5.7c.2.1.4.2.4.5 0 .8-.9 1.5-1.6 1.5-1.5.1-3.4-.6-5-2.1-1.3-1.2-2.1-2.7-2.3-3.5-.2-.7 0-1.3.2-1.6z" fill="var(--black)" /></symbol>
+      <symbol id="ic-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="1.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="M5 15V5a2 2 0 0 1 2-2h10" fill="none" stroke="currentColor" strokeWidth="1.5" /></symbol>
+    </svg>
+  );
+}
