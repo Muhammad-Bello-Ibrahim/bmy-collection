@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 96.5%; /* #F6F6F6 */
+    --foreground: 0 0% 6.7%;  /* #111111 */
+    --card: 0 0% 100%;        /* #FFFFFF */
+    --card-foreground: 0 0% 6.7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 6.7%;
+    --primary: 0 0% 6.7%;     /* #111111 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 18.4%;  /* #2F2F2F */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 96.5%;
+    --muted-foreground: 0 0% 43.5%; /* #6F6F6F */
+    --accent: 38 100% 73%;    /* #FFCB74 */
+    --accent-foreground: 0 0% 6.7%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 89.8%;     /* #E5E5E5 */
+    --input: 0 0% 89.8%;
+    --ring: 38 100% 73%;
+    --radius: 0.75rem;
+  }
+
+  body {
+    background-color: #F6F6F6;
+    color: #111111;
+    font-family: var(--font-roboto), Roboto, system-ui, -apple-system, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-montserrat), Montserrat, sans-serif;
+    color: #111111;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .surface-card {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.03);
+  }
+  .dark-feature-card {
+    background-color: #111111;
+    color: #FFFFFF;
+    border: 1px solid #2F2F2F;
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.25);
+  }
+  .accent-btn {
+    background-color: #FFCB74;
+    color: #111111;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .accent-btn:hover {
+    background-color: #E6B35C;
+    transform: translateY(-1px);
+  }
+  .dark-btn {
+    background-color: #111111;
+    color: #FFFFFF;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .dark-btn:hover {
+    background-color: #2F2F2F;
+    transform: translateY(-1px);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}

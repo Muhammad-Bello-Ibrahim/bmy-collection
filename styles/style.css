@@ -1,14 +1,21 @@
 :root {
-  --black: #0a0a0a;
-  --black-soft: #121212;
-  --black-card: #161514;
-  --ivory: #f3efe7;
-  --ivory-70: rgba(243, 239, 231, .7);
-  --ivory-50: rgba(243, 239, 231, .5);
-  --ivory-30: rgba(243, 239, 231, .3);
-  --hair: rgba(243, 239, 231, .14);
-  --hair-strong: rgba(243, 239, 231, .26);
-  --brass: #c9a869;
+  --black: #111111;
+  --black-soft: #2F2F2F;
+  --black-card: #FFFFFF;
+  --ivory: #FFFFFF;
+  --ivory-70: rgba(47, 47, 47, .7);
+  --ivory-50: rgba(47, 47, 47, .5);
+  --ivory-30: rgba(47, 47, 47, .3);
+  --hair: #E5E5E5;
+  --hair-strong: #2F2F2F;
+  --brass: #FFCB74;
+  --orange: #FFCB74;
+  --orange-light: #E6B35C;
+  --gray-bg: #F6F6F6;
+  --gray-card: #FFFFFF;
+  --gray-border: #E5E5E5;
+  --gray-text: #6F6F6F;
+  --gray-heading: #111111;
   --ease: cubic-bezier(.22, 1, .36, 1);
 }
 
@@ -225,14 +232,16 @@ header.site-nav .wrap {
 
 .brandmark {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
+  align-items: center;
+  gap: 12px;
 }
 
+.brandmark img,
 .brandmark svg {
-  width: 22px;
-  height: 22px;
-  color: var(--brass);
+  width: auto;
+  height: 36px;
+  max-height: 40px;
+  object-fit: contain;
   align-self: center;
 }
 
@@ -990,9 +999,23 @@ footer {
   }
 }
 
+.foot-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.foot-brand img {
+  height: 42px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
 .foot-brand .word {
   font-family: 'Fraunces', serif;
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   text-transform: uppercase;
   letter-spacing: .03em;
 }
@@ -1001,7 +1024,7 @@ footer {
   font-family: 'Space Mono', monospace;
   font-size: .72rem;
   color: var(--ivory-50);
-  margin-top: 8px;
+  margin-top: 2px;
 }
 
 .foot-col h5 {
@@ -1049,8 +1072,9 @@ footer {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--ivory);
-  color: var(--black);
+  background: #f35c16;
+  color: #ffffff;
+  box-shadow: 0 8px 25px -4px rgba(243, 92, 22, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1058,6 +1082,11 @@ footer {
   pointer-events: none;
   transform: translateY(10px);
   transition: opacity .3s var(--ease), transform .3s var(--ease);
+}
+
+#back-top:hover {
+  background: #d84807;
+  transform: translateY(-2px);
 }
 
 #back-top.show {

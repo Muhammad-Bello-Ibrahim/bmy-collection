@@ -35,22 +35,22 @@ const SLIDES = [
   {
     eyebrow: 'BMY Collection · Gombe',
     title: <>Crafted with <em>Heritage</em></>,
-    sub: 'Cut from shadda, brocade and atiku — tailored by hand in Gombe, finished to last.'
+    sub: 'Cut from premium shadda, brocade, and atiku — tailored by hand.'
   },
   {
     eyebrow: 'Ready-to-Wear · Bespoke',
     title: <>Designed for <em>Today</em></>,
-    sub: 'From ceremonial agbada to the everyday wardrobe — one atelier, the complete look.'
+    sub: 'Ceremonial agbada to everyday caftans.'
   },
   {
     eyebrow: 'Hand Finished',
     title: <>Details that <em>Matter</em></>,
-    sub: 'Embroidery, weave and silhouette — every seam considered, every piece signed by hand.'
+    sub: 'Fine embroidery, structured seams, and custom finishes.'
   },
   {
-    eyebrow: 'The Collection',
+    eyebrow: 'The Wardrobe',
     title: <>Discover the <em>Collection</em></>,
-    sub: 'Browse ready-to-wear and accessories, or start a bespoke enquiry at the atelier.'
+    sub: 'Explore pieces or book a custom bespoke fitting.'
   }
 ];
 
@@ -186,8 +186,10 @@ function initShowcase(THREE, GLTFLoader, RoomEnvironment, els, cbs) {
     return lerp(m.rotation50, m.rotation100, smoothstep((p - 0.75) / 0.25));
   }
 
+  const MODEL_Y_OFFSET = -0.35;
+
   function getDesktopX() {
-    return isMobile() ? 0 : 1.75;
+    return isMobile() ? 0 : 1.5;
   }
 
   function applyTimeline(p) {
@@ -198,14 +200,18 @@ function initShowcase(THREE, GLTFLoader, RoomEnvironment, els, cbs) {
 
     const xBase = getDesktopX();
     const side = smoothstep(clamp01((p - 0.5) / 0.25));
-    camera.position.x += Math.sin(side * Math.PI) * 0.18 + (isMobile() ? 0 : 0.4);
-    camera.lookAt(target.x + (isMobile() ? 0 : 0.6), target.y + Math.sin(side * Math.PI) * 0.06, target.z);
+    camera.position.x += Math.sin(side * Math.PI) * 0.18 + (isMobile() ? 0 : 0.25);
+    camera.lookAt(target.x + (isMobile() ? 0 : 0.45), target.y + Math.sin(side * Math.PI) * 0.06 + MODEL_Y_OFFSET * 0.4, target.z);
 
     const growth = p < 0.25 ? smoothstep(p / 0.25) : 1;
     model.scale.setScalar(state.baseScale * lerp(CONFIG.model.startScale, CONFIG.model.endScale, growth));
     model.rotation.y = rotationAt(p);
     model.position.x = xBase + Math.sin(side * Math.PI) * CONFIG.model.parallax;
-    if (shadow) shadow.position.x = model.position.x;
+    model.position.y = MODEL_Y_OFFSET;
+    if (shadow) {
+      shadow.position.x = model.position.x;
+      shadow.position.y = state.shadowY + MODEL_Y_OFFSET;
+    }
 
     canvas.style.opacity = p < 0.1 ? smoothstep(p / 0.1) : 1;
   }
@@ -242,11 +248,11 @@ function initShowcase(THREE, GLTFLoader, RoomEnvironment, els, cbs) {
     const vh = 2 * state.nearDist * Math.tan(THREE.MathUtils.degToRad(fov) / 2) * CONFIG.frameFill;
     const vw = vh * camera.aspect;
     const scale = Math.min(vw / Math.max(state.rawSize.x, 0.001), vh / Math.max(state.rawSize.y, 0.001));
-    state.baseScale = isMobile() ? scale : scale * 0.95;
+    state.baseScale = isMobile() ? scale : scale * 0.90;
     model.scale.setScalar(state.baseScale);
     state.shadowY = state.rawMinY * state.baseScale - 0.01;
     if (shadow) {
-      shadow.position.y = state.shadowY;
+      shadow.position.y = state.shadowY + MODEL_Y_OFFSET;
       shadow.position.x = getDesktopX();
     }
   }
