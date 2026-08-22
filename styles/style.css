@@ -153,14 +153,21 @@ textarea {
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .9s var(--ease), transform .9s var(--ease);
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js-reveal .reveal:not(.in) {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 }
 
 .reveal.in {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 .sprite {

@@ -74,6 +74,13 @@ export default function Showcase() {
     let cleanup = () => {};
     let raf = 0;
 
+    // Safety fallback timer — ensure UI never hangs on loading screen
+    const safetyTimer = setTimeout(() => {
+      if (!disposed && status === 'loading') {
+        setStatus('static');
+      }
+    }, 2800);
+
     (async () => {
       try {
         const THREE = await import('three');
@@ -91,17 +98,25 @@ export default function Showcase() {
           copy: copyRef.current
         };
         cleanup = initShowcase(THREE, GLTFLoader, RoomEnvironment, els, {
-          onReady: () => { if (!disposed) setStatus('ready'); },
-          onError: () => { if (!disposed) setStatus('error'); }
+          onReady: () => {
+            clearTimeout(safetyTimer);
+            if (!disposed) setStatus('ready');
+          },
+          onError: () => {
+            clearTimeout(safetyTimer);
+            if (!disposed) setStatus('static');
+          }
         });
       } catch (err) {
-        console.warn('3D showcase unavailable:', err);
-        if (!disposed) setStatus('error');
+        console.warn('3D showcase unavailable, switching to static showcase:', err);
+        clearTimeout(safetyTimer);
+        if (!disposed) setStatus('static');
       }
     })();
 
     return () => {
       disposed = true;
+      clearTimeout(safetyTimer);
       cancelAnimationFrame(raf);
       cleanup();
     };
@@ -112,7 +127,7 @@ export default function Showcase() {
       ? 'showcase is-static is-loaded'
       : status === 'ready'
         ? 'showcase is-loaded'
-        : 'showcase';
+        : 'showcase is-loaded';
 
   return (
     <section className={className} id="showcase" ref={sectionRef} aria-label="Scroll-driven 3D showcase">
