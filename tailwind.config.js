@@ -91,7 +91,6 @@ module.exports = {
         mono: ['var(--font-ubuntu)', 'Ubuntu', 'monospace'],
         technical: ['var(--font-ubuntu)', 'Ubuntu', 'monospace'],
         sans: ['var(--font-roboto)', 'Roboto', 'sans-serif'],
-        fraunces: ['Fraunces', 'serif'],
       },
       borderRadius: {
         sm: '8px',

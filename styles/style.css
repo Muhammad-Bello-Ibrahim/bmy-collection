@@ -48,7 +48,7 @@ body {
   margin: 0;
   background: var(--black);
   color: var(--ivory);
-  font-family: 'Sora', system-ui, sans-serif;
+  font-family: var(--font-roboto), Roboto, system-ui, sans-serif;
   font-weight: 300;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
@@ -74,10 +74,12 @@ ul {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6 {
   margin: 0;
-  font-family: 'Fraunces', serif;
-  font-weight: 500;
+  font-family: var(--font-montserrat), Montserrat, sans-serif;
+  font-weight: 600;
   letter-spacing: -.01em;
   color: var(--ivory);
 }
@@ -118,7 +120,7 @@ textarea {
 }
 
 .eyebrow {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .7rem;
   letter-spacing: .22em;
   text-transform: uppercase;
@@ -137,7 +139,7 @@ textarea {
 }
 
 .num {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .72rem;
   letter-spacing: .06em;
   color: var(--ivory-30);
@@ -177,7 +179,8 @@ textarea {
   font-size: .8rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-montserrat), Montserrat, sans-serif;
+  font-weight: 700;
   border-radius: 999px;
   transition: transform .3s var(--ease), background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
   border: 1px solid var(--hair-strong);
@@ -246,15 +249,15 @@ header.site-nav .wrap {
 }
 
 .brandmark .word {
-  font-family: 'Fraunces', serif;
+  font-family: var(--font-montserrat), Montserrat, sans-serif;
   font-size: 1.15rem;
   letter-spacing: .03em;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
 .brandmark .sub {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .68rem;
   letter-spacing: .05em;
   color: var(--ivory-50);
@@ -271,7 +274,7 @@ header.site-nav .wrap {
   font-size: .78rem;
   letter-spacing: .08em;
   text-transform: uppercase;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   color: var(--ivory-70);
   position: relative;
   padding: 4px 0;
@@ -483,7 +486,7 @@ header.site-nav .wrap {
   left: 40px;
   bottom: 36px;
   z-index: 2;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .7rem;
   letter-spacing: .15em;
   text-transform: uppercase;
@@ -550,7 +553,7 @@ header.site-nav .wrap {
 }
 
 .photo-frame .pf-label {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .62rem;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -583,7 +586,7 @@ section {
 
 .section-head h2 {
   font-size: clamp(2.1rem, 4vw, 3.1rem);
-  font-weight: 400;
+  font-weight: 700;
   margin-top: 18px;
 }
 
@@ -611,13 +614,13 @@ section {
 }
 
 .about-copy .pull {
-  font-family: 'Fraunces', serif;
+  font-family: var(--font-montserrat), Montserrat, sans-serif;
   font-style: italic;
   font-size: clamp(1.4rem, 2.4vw, 1.9rem);
   line-height: 1.4;
   color: var(--ivory);
   margin: 26px 0 26px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .about-copy .pull::before {
@@ -645,7 +648,7 @@ section {
 }
 
 .fabric-tags span {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .7rem;
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -706,7 +709,7 @@ section {
 
 .piece-meta h3 {
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 6px;
 }
 
@@ -719,7 +722,7 @@ section {
 .piece-meta .occ {
   font-size: .76rem;
   color: var(--ivory-30);
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   letter-spacing: .03em;
   margin-top: 4px;
 }
@@ -762,7 +765,7 @@ section {
 }
 
 .service-card .meta {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .72rem;
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -779,7 +782,7 @@ section {
 }
 
 .service-card .price {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .82rem;
   color: var(--ivory);
   padding-top: 20px;
@@ -868,7 +871,7 @@ form {
   text-transform: uppercase;
   color: var(--ivory-50);
   margin-bottom: 10px;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
 }
 
 .field input,
@@ -880,6 +883,7 @@ form {
   border-bottom: 1px solid var(--hair-strong);
   color: var(--ivory);
   padding: 10px 2px;
+  font-family: var(--font-roboto), Roboto, sans-serif;
   font-weight: 300;
   transition: border-color .25s var(--ease);
 }
@@ -902,7 +906,7 @@ form {
 
 #form-status {
   margin-top: 14px;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .78rem;
   color: var(--brass);
   min-height: 1.2em;
@@ -932,7 +936,7 @@ form {
 }
 
 .studio-row .r-label {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .66rem;
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -1014,21 +1018,22 @@ footer {
 }
 
 .foot-brand .word {
-  font-family: 'Fraunces', serif;
+  font-family: var(--font-montserrat), Montserrat, sans-serif;
   font-size: 1.35rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .03em;
 }
 
 .foot-brand .tag {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .72rem;
   color: var(--ivory-50);
   margin-top: 2px;
 }
 
 .foot-col h5 {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .68rem;
   letter-spacing: .1em;
   text-transform: uppercase;
@@ -1059,7 +1064,7 @@ footer {
 }
 
 .foot-bottom p {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-ubuntu), Ubuntu, monospace;
   font-size: .72rem;
   color: var(--ivory-30);
 }

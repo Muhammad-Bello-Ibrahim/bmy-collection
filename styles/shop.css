@@ -35,7 +35,7 @@ body {
     margin: 0;
     background: var(--black);
     color: var(--ivory);
-    font-family: 'Sora', system-ui, sans-serif;
+    font-family: var(--font-roboto), Roboto, system-ui, sans-serif;
     font-weight: 300;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -63,7 +63,7 @@ h2,
 h3,
 h4 {
     margin: 0;
-    font-family: 'Fraunces', serif;
+    font-family: var(--font-montserrat), Montserrat, sans-serif;
     font-weight: 500;
     letter-spacing: -.01em;
     color: var(--ivory);
@@ -105,7 +105,7 @@ textarea {
 }
 
 .eyebrow {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .7rem;
     letter-spacing: .2em;
     text-transform: uppercase;
@@ -157,7 +157,7 @@ textarea {
     font-size: .76rem;
     letter-spacing: .09em;
     text-transform: uppercase;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     border-radius: 999px;
     transition: transform .25s var(--ease), background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
     border: 1px solid var(--hair-strong);
@@ -225,7 +225,7 @@ header.site-nav .wrap {
 }
 
 .brandmark .word {
-    font-family: 'Fraunces', serif;
+    font-family: var(--font-montserrat), Montserrat, sans-serif;
     font-size: 1.1rem;
     letter-spacing: .03em;
     font-weight: 600;
@@ -233,7 +233,7 @@ header.site-nav .wrap {
 }
 
 .brandmark .sub {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .66rem;
     letter-spacing: .05em;
     color: var(--ivory-50);
@@ -250,7 +250,7 @@ header.site-nav .wrap {
     font-size: .76rem;
     letter-spacing: .08em;
     text-transform: uppercase;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     color: var(--ivory-70);
 }
 
@@ -286,7 +286,7 @@ header.site-nav .wrap {
     right: -6px;
     background: var(--brass);
     color: var(--black);
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .62rem;
     font-weight: 700;
     width: 18px;
@@ -370,7 +370,7 @@ header.site-nav .wrap {
 
 .chip {
     flex-shrink: 0;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .72rem;
     letter-spacing: .04em;
     text-transform: uppercase;
@@ -432,7 +432,7 @@ select.sort-select {
     border-radius: 999px;
     color: var(--ivory-70);
     font-size: .72rem;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     letter-spacing: .04em;
     text-transform: uppercase;
     padding: 9px 14px;
@@ -444,7 +444,7 @@ select.sort-select {
 }
 
 .result-count {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .72rem;
     color: var(--ivory-50);
     letter-spacing: .04em;
@@ -498,7 +498,7 @@ select.sort-select {
 }
 
 .p-media .pf-label {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .6rem;
     letter-spacing: .06em;
     text-transform: uppercase;
@@ -521,7 +521,7 @@ select.sort-select {
     color: var(--black);
     border-radius: 999px;
     padding: 5px 11px;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .6rem;
     letter-spacing: .04em;
     text-transform: uppercase;
@@ -566,7 +566,7 @@ select.sort-select {
     color: var(--black);
     text-align: center;
     padding: 10px;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .68rem;
     letter-spacing: .06em;
     text-transform: uppercase;
@@ -611,7 +611,7 @@ select.sort-select {
 }
 
 .p-price {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .9rem;
     color: var(--ivory);
 }
@@ -769,7 +769,7 @@ select.sort-select {
 }
 
 .ci-info .ci-price {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .78rem;
     color: var(--ivory-70);
 }
@@ -793,7 +793,7 @@ select.sort-select {
 }
 
 .ci-qty span {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .8rem;
     min-width: 14px;
     text-align: center;
@@ -826,7 +826,7 @@ select.sort-select {
 }
 
 .cart-sub-row span:first-child {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .72rem;
     letter-spacing: .06em;
     text-transform: uppercase;
@@ -834,7 +834,7 @@ select.sort-select {
 }
 
 .cart-sub-row span:last-child {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: 1.1rem;
     color: var(--ivory);
 }
@@ -932,7 +932,7 @@ select.sort-select {
 }
 
 .modal-tag {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .66rem;
     letter-spacing: .06em;
     text-transform: uppercase;
@@ -946,7 +946,7 @@ select.sort-select {
 }
 
 .modal-price {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: 1.1rem;
     color: var(--ivory);
     margin-bottom: 18px;
@@ -984,7 +984,7 @@ select.sort-select {
 }
 
 .qty-stepper span {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     min-width: 16px;
     text-align: center;
 }
@@ -999,7 +999,7 @@ select.sort-select {
     color: var(--black);
     padding: 14px 22px;
     border-radius: 999px;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .78rem;
     z-index: 300;
     opacity: 0;
@@ -1027,13 +1027,13 @@ footer .wrap {
 }
 
 footer p {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .72rem;
     color: var(--ivory-30);
 }
 
 footer a {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .72rem;
     color: var(--ivory-50);
 }
@@ -1069,7 +1069,7 @@ footer a:hover {
 }
 
 .admin-modal-title {
-    font-family: 'Fraunces', serif;
+    font-family: var(--font-montserrat), Montserrat, sans-serif;
     font-size: 1.6rem;
     font-weight: 400;
     margin-bottom: 6px;
@@ -1106,7 +1106,7 @@ footer a:hover {
 
 .admin-field label {
     display: block;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .66rem;
     letter-spacing: .12em;
     text-transform: uppercase;
@@ -1144,7 +1144,7 @@ footer a:hover {
     padding: 5px 12px;
     background: var(--brass);
     color: var(--black);
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .62rem;
     letter-spacing: .06em;
     text-transform: uppercase;
@@ -1204,7 +1204,7 @@ footer a:hover {
 .admin-tab {
     flex: 1;
     padding: 14px;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .66rem;
     letter-spacing: .08em;
     text-transform: uppercase;
@@ -1262,7 +1262,7 @@ footer a:hover {
 }
 
 .admin-product-info .meta {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .65rem;
     color: var(--ivory-50);
 }
@@ -1308,7 +1308,7 @@ footer a:hover {
 }
 
 .admin-form-title {
-    font-family: 'Fraunces', serif;
+    font-family: var(--font-montserrat), Montserrat, sans-serif;
     font-size: 1.1rem;
     font-weight: 400;
     margin-bottom: 4px;
@@ -1319,7 +1319,7 @@ footer a:hover {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .66rem;
     letter-spacing: .08em;
     text-transform: uppercase;
@@ -1347,7 +1347,7 @@ footer a:hover {
     color: var(--ivory);
     padding: 10px 14px;
     font-size: .85rem;
-    font-family: 'Sora', sans-serif;
+    font-family: var(--font-roboto), Roboto, sans-serif;
     transition: border-color .2s;
     resize: none;
 }
@@ -1365,7 +1365,7 @@ footer a:hover {
 
 .admin-form label {
     display: block;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .63rem;
     letter-spacing: .1em;
     text-transform: uppercase;
@@ -1425,7 +1425,7 @@ footer a:hover {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .6rem;
     letter-spacing: .05em;
     text-transform: uppercase;
@@ -1446,7 +1446,7 @@ footer a:hover {
 }
 
 .size-chip {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .6rem;
     letter-spacing: .04em;
     border: 1px solid var(--hair-strong);
@@ -1479,7 +1479,7 @@ footer a:hover {
     padding: 14px;
     border: 1px dashed var(--hair-strong);
     color: var(--ivory-50);
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-ubuntu), Ubuntu, monospace;
     font-size: .7rem;
     letter-spacing: .08em;
     text-transform: uppercase;
@@ -1507,5 +1507,4 @@ footer a:hover {
 .shop-loading { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 2px; background: var(--hair); border: 1px solid var(--hair); }  
 .product-skeleton { background: var(--black); aspect-ratio: 4/5; animation: shimmer 1.4s infinite; }  
 @keyframes shimmer { 0%{opacity:.4} 50%{opacity:.8} 100%{opacity:.4} }  
-/* ---------- Featured badge ---------- */  
-.p-featured-badge { position: absolute; left: 12px; bottom: 44px; background: var(--brass); color: var(--black); border-radius: 999px; padding: 4px 10px; font-family: 'Space Mono', monospace; font-size: .58rem; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; z-index: 2; } 
+.p-featured-badge { position: absolute; left: 12px; bottom: 44px; background: var(--brass); color: var(--black); border-radius: 999px; padding: 4px 10px; font-family: var(--font-ubuntu), Ubuntu, monospace; font-size: .58rem; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; z-index: 2; } 

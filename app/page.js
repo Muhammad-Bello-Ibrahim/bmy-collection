@@ -25,32 +25,33 @@ export default function Home() {
       {/* Collection Section */}
       <section className="py-20 sm:py-32 bg-[#F6F6F6] border-t border-[#E5E5E5]" id="collection">
         <div className="wrap max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="section-head reveal mb-10 max-w-2xl text-left">
-            <p className="eyebrow text-[#111111] font-mono text-xs uppercase tracking-widest font-bold">
-              The Wardrobe Collection
-            </p>
-            <h2 className="font-heading text-3xl sm:text-5xl text-[#111111] font-bold leading-tight mt-3">
+          <div className="section-head reveal mb-10 max-w-2xl text-left space-y-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFFFFF] border border-[#E5E5E5] text-xs font-mono text-[#111111] uppercase tracking-wider font-bold shadow-sm">
+              <span>✦</span>
+              <span>The Wardrobe Collection</span>
+            </div>
+            <h2 className="font-heading text-3xl sm:text-5xl lg:text-6xl text-[#111111] font-bold leading-tight tracking-tight">
               Pieces from the atelier.
             </h2>
-            <p className="text-[#6F6F6F] text-sm sm:text-base font-body mt-2">
-              Ceremonial agbada, tailored caftans, and luxury accessories.
+            <p className="text-[#4B5563] text-sm sm:text-base font-body leading-relaxed max-w-xl">
+              Ceremonial agbadas, bespoke caftans, authentic yardage fabrics, and luxury accessories — handcrafted with precision.
             </p>
           </div>
         </div>
 
         <CollectionMarquee />
 
-        <div className="wrap max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 flex flex-col sm:flex-row items-center justify-start gap-4">
+        <div className="wrap max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 flex flex-col sm:flex-row items-stretch sm:items-center justify-start gap-4">
           <Link
             href="/shop"
-            className="px-8 py-4 rounded-xl bg-[#111111] hover:bg-[#2F2F2F] text-[#FFFFFF] font-heading text-xs uppercase tracking-widest font-bold shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95"
+            className="px-8 py-4 rounded-2xl bg-[#111111] hover:bg-[#2F2F2F] text-[#FFFFFF] font-heading text-xs uppercase tracking-widest font-bold shadow-xl flex items-center justify-center gap-2.5 transition-all active:scale-[0.98]"
           >
             <ShoppingBag className="w-4 h-4 text-[#FFCB74]" />
             <span>Shop Full Catalog</span>
           </Link>
           <a
             href="#services"
-            className="px-7 py-4 rounded-xl bg-[#FFFFFF] hover:bg-[#F6F6F6] border border-[#E5E5E5] text-[#111111] font-heading text-xs uppercase tracking-widest font-semibold transition-all"
+            className="px-8 py-4 rounded-2xl bg-[#FFFFFF] hover:bg-[#F6F6F6] border border-[#E5E5E5] text-[#111111] font-heading text-xs uppercase tracking-widest font-bold shadow-sm transition-all text-center"
           >
             Services &amp; Pricing
           </a>

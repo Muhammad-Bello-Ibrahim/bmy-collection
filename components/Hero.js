@@ -30,6 +30,7 @@ export default function Hero() {
           loop
           playsInline
           preload="auto"
+          poster="/images/hero1.jpg"
           src="/images/hero-vid.mp4"
         >
           <source src="/images/hero-vid.mp4" type="video/mp4" />
@@ -40,32 +41,33 @@ export default function Hero() {
 
       {/* Main Content */}
       <div className="wrap hero-inner reveal in relative z-10 pt-24 sm:pt-28 pb-16 sm:pb-20 max-w-4xl">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111111]/80 backdrop-blur-md border border-white/10 text-[#FFCB74] text-[11px] font-mono tracking-widest uppercase mb-4 shadow">
-          <Sparkles className="w-3.5 h-3.5" /> Bespoke &amp; Ready-to-Wear · Gombe
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111111]/85 backdrop-blur-md border border-white/15 text-[#FFCB74] text-xs font-mono tracking-widest uppercase mb-5 shadow-lg">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Bespoke &amp; Ready-to-Wear · Gombe</span>
         </div>
 
-        <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.08] text-white tracking-tight mb-5">
+        <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.08] text-white tracking-tight mb-6">
           Cut with care, <em className="text-[#FFCB74] italic font-normal">worn with pride.</em>
         </h1>
 
-        <p className="lede text-white/85 text-sm sm:text-base lg:text-lg font-body font-normal leading-relaxed max-w-xl mb-8">
-          Bespoke caftans, ceremonial agbadas, and luxury menswear — hand-tailored in Gombe.
+        <p className="lede text-white/90 text-sm sm:text-base lg:text-lg font-body font-normal leading-relaxed max-w-xl mb-8">
+          Bespoke caftans, ceremonial agbadas, and luxury menswear — hand-tailored to perfection in Gombe.
         </p>
 
         {/* CTAs */}
-        <div className="hero-ctas flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-8">
+        <div className="hero-ctas flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 mb-8">
           <Link
             href="/shop"
-            className="px-8 py-4 rounded-xl bg-[#FFCB74] hover:bg-[#E6B35C] text-[#111111] font-heading text-xs uppercase tracking-widest font-bold shadow-xl shadow-[#FFCB74]/25 text-center flex items-center justify-center gap-2 active:scale-95 transition-all"
+            className="px-8 py-4 rounded-2xl bg-[#FFCB74] hover:bg-[#E6B35C] text-[#111111] font-heading text-xs uppercase tracking-widest font-bold shadow-xl shadow-[#FFCB74]/25 text-center flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all"
           >
             <ShoppingBag className="w-4 h-4" />
             <span>Shop Online Store</span>
           </Link>
           <a
             href="#collection"
-            className="px-7 py-4 rounded-xl border border-white/30 hover:border-[#FFCB74] text-white hover:text-[#FFCB74] font-heading text-xs uppercase tracking-widest transition-all text-center backdrop-blur-sm"
+            className="px-8 py-4 rounded-2xl border border-white/30 hover:border-[#FFCB74] hover:bg-white/10 text-white hover:text-[#FFCB74] font-heading text-xs uppercase tracking-widest font-bold transition-all text-center backdrop-blur-md"
           >
-            Explore 3D Showcase
+            Explore Wardrobe
           </a>
         </div>
 

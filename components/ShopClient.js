@@ -39,6 +39,9 @@ import {
   Award,
   Layers,
   User,
+  Wrench,
+  Clock,
+  ShieldAlert,
 } from 'lucide-react';
 
 const EMPTY_CART_MSG = 'Your shopping bag is empty. Explore our pieces.';
@@ -111,6 +114,35 @@ export default function ShopClient() {
       })
       .catch(() => {})
       .finally(() => setLoadingProducts(false));
+  }, []);
+
+  /* ---------- Deep Link Query Handler (?piece=... or ?id=...) ---------- */
+  useEffect(() => {
+    if (typeof window === 'undefined' || !products.length) return;
+    const params = new URLSearchParams(window.location.search);
+    const targetId = params.get('piece') || params.get('id') || params.get('p');
+    if (targetId) {
+      const match = products.find((p) => p.id === targetId);
+      if (match) {
+        setSelectedProduct(match);
+      }
+    }
+  }, [products]);
+
+  /* ---------- maintenance mode & settings ---------- */
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [maintenanceMsg, setMaintenanceMsg] = useState('');
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.settings) {
+          setMaintenanceMode(!!d.settings.maintenanceMode);
+          setMaintenanceMsg(d.settings.maintenanceMessage || '');
+        }
+      })
+      .catch(() => {});
   }, []);
 
   /* ---------- auto-scrolling adverts banner state ---------- */
@@ -258,12 +290,20 @@ export default function ShopClient() {
   /* ---------- WhatsApp order message ---------- */
   const orderMessage = useMemo(() => {
     if (!cartEntries.length) return '';
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
     let msg = `✨ *BMY COLLECTION & KAFTAN — ORDER INQUIRY* ✨\n\n`;
-    msg += `Hello BMY Atelier, I would like to place an order for the following items:\n\n`;
+    msg += `Hello BMY Atelier, I would like to place an order for the following pieces:\n\n`;
     cartEntries.forEach((item, index) => {
       const sizeStr = item.size ? ` (Size: ${item.size})` : '';
-      msg += `${index + 1}. *${item.product.name}*${sizeStr}\n`;
-      msg += `   Quantity: ${item.qty} | Price: ${fmt(item.product.price)}\n\n`;
+      const p = item.product;
+      const imgSrc = p.cloudinaryUrl || p.img || '/products/476025.jpg';
+      const fullImgUrl = imgSrc.startsWith('http') ? imgSrc : (origin ? `${origin}${imgSrc}` : imgSrc);
+      const productLink = origin ? `${origin}/shop?piece=${p.id}` : `/shop?piece=${p.id}`;
+
+      msg += `${index + 1}. *${p.name}*${sizeStr}\n`;
+      msg += `   • Quantity: ${item.qty} | Price: ${fmt(p.price)}\n`;
+      msg += `   • Piece Link: ${productLink}\n`;
+      msg += `   • Image: ${fullImgUrl}\n\n`;
     });
     msg += `---------------------------------\n`;
     msg += `*Estimated Subtotal:* ${fmt(cartSubtotal)}\n`;
@@ -335,8 +375,161 @@ export default function ShopClient() {
     : ADVERTS[0];
   const BadgeIcon = typeof currentAdv.badgeIcon === 'function' ? currentAdv.badgeIcon : Sparkles;
 
+  /* ─────────────────────────────────────────────────────────
+     MAINTENANCE MODE VIEW FOR PUBLIC CUSTOMERS
+     ───────────────────────────────────────────────────────── */
+  if (maintenanceMode && !isAdmin) {
+    return (
+      <div className="min-h-screen bg-[#F6F6F6] text-[#111111] font-body flex flex-col justify-between selection:bg-[#FFCB74] selection:text-[#111111]">
+        {/* Top Header */}
+        <header className="bg-[#FFFFFF] border-b border-[#E5E5E5] px-4 sm:px-8 py-4 shadow-sm">
+          <div className="max-w-4xl mx-auto flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-[#E5E5E5] bg-[#F6F6F6] flex items-center justify-center p-1">
+                <img
+                  src="/assets/logo.png"
+                  alt="BMY Logo"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div>
+                <span className="text-[10px] font-mono text-[#6F6F6F] block leading-tight uppercase tracking-wider">
+                  Atelier Boutique
+                </span>
+                <h3 className="font-heading text-sm sm:text-base font-bold text-[#111111] leading-tight">
+                  BMY Collection &amp; Kaftan
+                </h3>
+              </div>
+            </Link>
+
+            <div className="flex items-center gap-2">
+              <Link
+                href="/"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-mono uppercase tracking-wider bg-[#F6F6F6] hover:bg-[#EEEEEE] text-[#2F2F2F] border border-[#E5E5E5] transition-colors font-medium"
+              >
+                Showcase
+              </Link>
+              <button
+                onClick={() => setShowLogin(true)}
+                className="p-2 rounded-xl text-[#6F6F6F] hover:text-[#111111] hover:bg-[#F6F6F6] transition-colors border border-transparent hover:border-[#E5E5E5]"
+                title="Atelier Admin Portal"
+                aria-label="Admin Portal"
+              >
+                <User className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Maintenance Hero Card */}
+        <main className="max-w-xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center space-y-8 flex-1 flex flex-col justify-center items-center">
+          {/* Animated Icon Avatar */}
+          <div className="relative">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-[#111111] text-[#FFCB74] flex items-center justify-center border-2 border-[#2F2F2F] shadow-2xl mx-auto">
+              <Wrench className="w-9 h-9 sm:w-11 sm:h-11 animate-pulse" />
+            </div>
+            <div className="absolute -bottom-2 -right-2 bg-[#FFCB74] text-[#111111] p-1.5 rounded-full shadow-lg border-2 border-[#FFFFFF]">
+              <Sparkles className="w-4 h-4" />
+            </div>
+          </div>
+
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-mono font-bold uppercase tracking-wider">
+            <Clock className="w-3.5 h-3.5" />
+            <span>Store Under Maintenance</span>
+          </div>
+
+          {/* Title & Apology */}
+          <div className="space-y-3 max-w-md">
+            <h1 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#111111] tracking-tight leading-tight">
+              We&apos;re Curating Something Extraordinary
+            </h1>
+            <p className="text-xs sm:text-sm text-[#6F6F6F] font-body leading-relaxed">
+              {maintenanceMsg ||
+                'We are currently refining our catalog and updating our atelier inventory. We sincerely apologize for any inconvenience. For urgent orders or bespoke commissions, please reach out directly to our concierge.'}
+            </p>
+          </div>
+
+          {/* Concierge & Action Buttons */}
+          <div className="w-full space-y-3 max-w-sm pt-2">
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                'Hello BMY Atelier, I am reaching out regarding a custom order or inquiry while the shop is undergoing maintenance.'
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-4 px-6 rounded-2xl bg-[#FFCB74] hover:bg-[#E6B35C] text-[#111111] font-heading text-xs uppercase tracking-widest font-bold shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+            >
+              <PhoneCall className="w-4 h-4" />
+              <span>Contact Concierge on WhatsApp</span>
+            </a>
+
+            <Link
+              href="/"
+              className="w-full py-3.5 px-6 rounded-2xl bg-[#FFFFFF] hover:bg-[#EEEEEE] border border-[#E5E5E5] text-[#2F2F2F] font-mono text-xs uppercase tracking-wider font-semibold flex items-center justify-center gap-2 transition-all"
+            >
+              <Home className="w-3.5 h-3.5" />
+              <span>Return to Brand Showcase</span>
+            </Link>
+          </div>
+
+          {/* Real-time Services Info */}
+          <div className="w-full pt-6 border-t border-[#E5E5E5] grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+            <div className="p-3.5 rounded-xl bg-[#FFFFFF] border border-[#E5E5E5] space-y-1">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[#FFCB74] font-bold block">
+                Bespoke Inquiries
+              </span>
+              <p className="text-xs text-[#2F2F2F]">
+                Our master tailors remain available for wedding &amp; ceremonial fittings.
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-[#FFFFFF] border border-[#E5E5E5] space-y-1">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[#FFCB74] font-bold block">
+                Atelier Location
+              </span>
+              <p className="text-xs text-[#2F2F2F]">
+                Walk-ins welcomed in Gombe State, Nigeria.
+              </p>
+            </div>
+          </div>
+        </main>
+
+        {/* Footer */}
+        <footer className="py-6 px-4 text-center border-t border-[#E5E5E5] bg-[#FFFFFF] text-[11px] font-mono text-[#A0A0A0]">
+          <p>© {new Date().getFullYear()} BMY Collection &amp; Kaftan. All rights reserved.</p>
+        </footer>
+
+        {/* Admin Login Modal for Admin access */}
+        {showLogin && (
+          <AdminLoginModal
+            open={showLogin}
+            onSuccess={() => {
+              setShowLogin(false);
+              setIsAdmin(true);
+            }}
+            onClose={() => setShowLogin(false)}
+          />
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#F6F6F6] text-[#111111] font-body relative pb-32 selection:bg-[#FFCB74] selection:text-[#111111]">
+      {/* Admin Maintenance Mode Preview Notification */}
+      {maintenanceMode && isAdmin && (
+        <div className="bg-[#111111] text-[#FFCB74] px-4 py-2 text-xs font-mono font-bold flex items-center justify-between border-b border-[#2F2F2F] sticky top-0 z-40">
+          <div className="flex items-center gap-2">
+            <Wrench className="w-4 h-4 text-[#FFCB74]" />
+            <span>MAINTENANCE MODE ACTIVE — Store is offline to public visitors.</span>
+          </div>
+          <Link href="/admin" className="underline hover:text-white transition-colors">
+            Manage in Admin
+          </Link>
+        </div>
+      )}
+
       {/* ─────────────────────────────────────────────────────────
           1. TOP HEADER (#FFFFFF surface with #E5E5E5 border)
           ───────────────────────────────────────────────────────── */}
@@ -352,9 +545,6 @@ export default function ShopClient() {
               />
             </div>
             <div>
-              <span className="text-[11px] font-mono text-[#6F6F6F] block leading-tight">
-                Atelier Catalog
-              </span>
               <h3 className="font-heading text-base font-bold text-[#111111] leading-tight tracking-tight">
                 BMY Collection &amp; Kaftan
               </h3>
@@ -383,14 +573,6 @@ export default function ShopClient() {
             >
               <Bell className="w-4 h-4" />
             </button>
-
-            {/* Link back to Main Site */}
-            <Link
-              href="/"
-              className="inline-flex items-center px-3.5 py-1.5 rounded-xl text-[11px] font-mono uppercase tracking-wider bg-[#F6F6F6] hover:bg-[#EEEEEE] text-[#2F2F2F] border border-[#E5E5E5] transition-colors font-medium"
-            >
-              Showcase
-            </Link>
           </div>
         </div>
       </header>

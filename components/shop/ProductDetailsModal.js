@@ -49,6 +49,10 @@ export default function ProductDetailsModal({
 
   // Build WhatsApp order link
   const buildWhatsAppMessage = () => {
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const fullImgUrl = imgSrc.startsWith('http') ? imgSrc : (origin ? `${origin}${imgSrc}` : imgSrc);
+    const productLink = origin ? `${origin}/shop?piece=${product.id}` : `/shop?piece=${product.id}`;
+
     let msg = `✨ *BMY COLLECTION & KAFTAN — ORDER INQUIRY* ✨\n\n`;
     msg += `Hello BMY Atelier, I would like to order:\n`;
     msg += `• *Garment:* ${product.name}\n`;
@@ -56,6 +60,8 @@ export default function ProductDetailsModal({
     msg += `• *Color/Fabric:* ${selectedColor.name}\n`;
     msg += `• *Quantity:* ${qty}\n`;
     msg += `• *Price:* ${fmt(product.price)}\n\n`;
+    msg += `🔗 *Product Link:* ${productLink}\n`;
+    msg += `🖼️ *Product Image:* ${fullImgUrl}\n\n`;
     msg += `Please confirm stock and provide delivery instructions. Thank you!`;
     return encodeURIComponent(msg);
   };

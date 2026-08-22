@@ -31,6 +31,7 @@ import {
   User,
   Loader2,
   Eye,
+  EyeOff,
   Check,
   X,
   Menu,
@@ -42,6 +43,8 @@ import {
   LayoutGrid,
   List,
   Table as TableIcon,
+  Wrench,
+  ShieldAlert,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -91,11 +94,30 @@ export default function AdminDashboardClient() {
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
 
+  // Admin User info
+  const [adminUsername, setAdminUsername] = useState('admin');
+
+  // Credential change state
+  const [credCurrentPassword, setCredCurrentPassword] = useState('');
+  const [credNewUsername, setCredNewUsername] = useState('');
+  const [credNewPassword, setCredNewPassword] = useState('');
+  const [credConfirmPassword, setCredConfirmPassword] = useState('');
+  const [credError, setCredError] = useState('');
+  const [credSuccess, setCredSuccess] = useState('');
+  const [savingCreds, setSavingCreds] = useState(false);
+  const [showCredPasswords, setShowCredPasswords] = useState(false);
+
   useEffect(() => {
     fetch('/api/auth/me')
       .then((r) => r.json())
       .then((d) => {
-        if (d.isAdmin) setIsAdmin(true);
+        if (d.isAdmin) {
+          setIsAdmin(true);
+          if (d.username) {
+            setAdminUsername(d.username);
+            setCredNewUsername(d.username);
+          }
+        }
       })
       .catch(() => {})
       .finally(() => setCheckingAuth(false));
@@ -117,6 +139,13 @@ export default function AdminDashboardClient() {
         return;
       }
       setIsAdmin(true);
+      if (data.username) {
+        setAdminUsername(data.username);
+        setCredNewUsername(data.username);
+      } else {
+        setAdminUsername(loginUsername);
+        setCredNewUsername(loginUsername);
+      }
       showToast('Welcome, Atelier Admin');
     } catch {
       setLoginError('Connection error — please check network');
@@ -129,6 +158,65 @@ export default function AdminDashboardClient() {
     await fetch('/api/auth/logout', { method: 'POST' });
     setIsAdmin(false);
     showToast('Signed out of admin console');
+  };
+
+  const handleUpdateCredentials = async (e) => {
+    e.preventDefault();
+    setCredError('');
+    setCredSuccess('');
+
+    if (!credCurrentPassword) {
+      setCredError('Current password is required for security verification.');
+      return;
+    }
+
+    if (!credNewUsername.trim() && !credNewPassword) {
+      setCredError('Please enter a new username or a new password.');
+      return;
+    }
+
+    if (credNewPassword && credNewPassword.length < 6) {
+      setCredError('New password must be at least 6 characters long.');
+      return;
+    }
+
+    if (credNewPassword && credNewPassword !== credConfirmPassword) {
+      setCredError('New password and confirmation do not match.');
+      return;
+    }
+
+    setSavingCreds(true);
+    try {
+      const res = await fetch('/api/auth/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword: credCurrentPassword,
+          newUsername: credNewUsername.trim() || undefined,
+          newPassword: credNewPassword || undefined,
+          confirmNewPassword: credConfirmPassword || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setCredError(data.error || 'Failed to update credentials');
+        return;
+      }
+
+      setCredSuccess(data.message || 'Admin credentials updated successfully.');
+      showToast('Admin credentials updated successfully');
+      if (data.username) {
+        setAdminUsername(data.username);
+        setCredNewUsername(data.username);
+      }
+      setCredCurrentPassword('');
+      setCredNewPassword('');
+      setCredConfirmPassword('');
+    } catch {
+      setCredError('Connection error — please check network');
+    } finally {
+      setSavingCreds(false);
+    }
   };
 
   /* ---------- Dashboard Navigation ---------- */
@@ -190,11 +278,79 @@ export default function AdminDashboardClient() {
       .finally(() => setLoadingAdverts(false));
   };
 
+  /* ---------- Data: Settings & Maintenance Mode ---------- */
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [maintenanceMsg, setMaintenanceMsg] = useState(
+    'We are currently refining our catalog and updating our atelier inventory. We sincerely apologize for any inconvenience. For urgent orders or bespoke commissions, please reach out directly to our concierge.'
+  );
+  const [savingSettings, setSavingSettings] = useState(false);
+
+  const fetchSettings = () => {
+    fetch('/api/settings')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.settings) {
+          setMaintenanceMode(!!d.settings.maintenanceMode);
+          if (d.settings.maintenanceMessage) {
+            setMaintenanceMsg(d.settings.maintenanceMessage);
+          }
+        }
+      })
+      .catch(() => {});
+  };
+
   useEffect(() => {
     if (isAdmin) {
-      fetchAdverts();
+      fetchSettings();
     }
   }, [isAdmin]);
+
+  const handleToggleMaintenance = async (newVal) => {
+    setMaintenanceMode(newVal);
+    setSavingSettings(true);
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          maintenanceMode: newVal,
+          maintenanceMessage: maintenanceMsg,
+        }),
+      });
+      if (res.ok) {
+        showToast(newVal ? '⚠️ Maintenance Mode Activated' : '✅ Store is now LIVE');
+      } else {
+        showToast('Failed to update maintenance mode');
+      }
+    } catch {
+      showToast('Error saving settings');
+    } finally {
+      setSavingSettings(false);
+    }
+  };
+
+  const handleSaveMaintenanceMsg = async () => {
+    setSavingSettings(true);
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          maintenanceMode,
+          maintenanceMessage: maintenanceMsg,
+        }),
+      });
+      if (res.ok) {
+        showToast('Apology message updated');
+      } else {
+        showToast('Failed to save message');
+      }
+    } catch {
+      showToast('Error saving settings');
+    } finally {
+      setSavingSettings(false);
+    }
+  };
 
   /* ---------- Product Modal / Form State ---------- */
   const [productModalOpen, setProductModalOpen] = useState(false);
@@ -694,6 +850,24 @@ export default function AdminDashboardClient() {
 
       {/* ─────────────────── MAIN WORKSPACE ─────────────────── */}
       <div className="flex-1 flex flex-col min-w-0">
+        {/* Maintenance Mode Top Warning Banner */}
+        {maintenanceMode && (
+          <div className="bg-[#FFCB74] text-[#111111] px-4 sm:px-6 py-2.5 text-xs font-mono font-bold flex items-center justify-between shadow-sm sticky top-0 z-30 border-b border-[#E6B35C]">
+            <div className="flex items-center gap-2">
+              <Wrench className="w-4 h-4 text-[#111111] shrink-0" />
+              <span className="truncate">
+                MAINTENANCE MODE ACTIVE — Public shop is closed &amp; displaying under-maintenance apology
+              </span>
+            </div>
+            <button
+              onClick={() => handleToggleMaintenance(false)}
+              className="underline hover:opacity-80 transition-opacity uppercase text-[11px] tracking-wider shrink-0 ml-4"
+            >
+              Turn Off &amp; Make Store Live
+            </button>
+          </div>
+        )}
+
         {/* Top Action Bar (Clean & Minimalist) */}
         <header className="sticky top-0 z-20 bg-[#FFFFFF]/95 backdrop-blur-md border-b border-[#E5E5E5] px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-3">
@@ -1373,54 +1547,283 @@ export default function AdminDashboardClient() {
           )}
 
           {/* ─────────────────────────────────────────────────────────
-              TAB 5: DATABASE & SETTINGS & SESSION
+              TAB 5: DATABASE & SETTINGS & SESSION (MINIMALIST REDESIGN)
               ───────────────────────────────────────────────────────── */}
           {activeTab === 'settings' && (
-            <div className="space-y-6">
-              {/* Store Navigation & Session Card */}
-              <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-sm space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#111111] text-[#FFCB74] flex items-center justify-center border border-[#2F2F2F]">
-                    <ShieldCheck className="w-5 h-5" />
+            <div className="space-y-6 max-w-4xl">
+              {/* 1. Master Admin Identity & Session Hero */}
+              <div className="p-6 sm:p-8 rounded-3xl bg-[#111111] text-[#FFFFFF] border border-[#2F2F2F] shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="relative w-14 h-14 rounded-2xl bg-[#2F2F2F] border border-white/10 flex items-center justify-center text-[#FFCB74] font-heading font-bold text-xl shadow-inner shrink-0">
+                    {adminUsername.slice(0, 2).toUpperCase()}
+                    <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-[#111111]" title="Session Active" />
                   </div>
                   <div>
-                    <h3 className="font-heading text-base font-bold text-[#111111]">
-                      Store Navigation &amp; Admin Session
-                    </h3>
-                    <p className="text-xs font-mono text-[#6F6F6F]">
-                      Signed in as Atelier Administrator
+                    <div className="flex items-center gap-2">
+                      <h2 className="font-heading text-lg sm:text-xl font-bold text-[#FFFFFF]">
+                        @{adminUsername}
+                      </h2>
+                      <span className="text-[10px] font-mono font-bold bg-[#FFCB74] text-[#111111] px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        Master Admin
+                      </span>
+                    </div>
+                    <p className="text-xs font-mono text-[#A0A0A0] mt-0.5">
+                      BMY Atelier Management · Gombe, Nigeria
                     </p>
                   </div>
                 </div>
 
-                <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex items-center gap-2.5 shrink-0">
                   <Link
                     href="/shop"
                     target="_blank"
-                    className="w-full py-3.5 px-4 rounded-xl bg-[#111111] hover:bg-[#2F2F2F] text-[#FFFFFF] text-xs font-heading uppercase tracking-wider font-bold flex items-center justify-center gap-2 shadow-sm transition-colors"
+                    className="flex-1 sm:flex-none py-2.5 px-4 rounded-xl bg-[#2F2F2F] hover:bg-[#FFCB74] hover:text-[#111111] text-[#FFFFFF] text-xs font-heading uppercase tracking-wider font-bold flex items-center justify-center gap-2 border border-white/10 transition-all shadow-sm"
                   >
-                    <ExternalLink className="w-4 h-4 text-[#FFCB74]" />
-                    <span>View Live Store</span>
+                    <ExternalLink className="w-4 h-4" />
+                    <span>View Store</span>
                   </Link>
 
                   <button
                     onClick={handleLogout}
-                    className="w-full py-3.5 px-4 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 text-xs font-heading uppercase tracking-wider font-bold flex items-center justify-center gap-2 transition-colors"
+                    className="flex-1 sm:flex-none py-2.5 px-4 rounded-xl bg-red-950/40 hover:bg-red-600 hover:text-white border border-red-800/40 text-red-400 text-xs font-heading uppercase tracking-wider font-bold flex items-center justify-center gap-2 transition-all"
                   >
                     <LogOut className="w-4 h-4" />
-                    <span>Sign Out of Atelier</span>
+                    <span>Sign Out</span>
                   </button>
                 </div>
               </div>
 
-              {/* Database & Data Controls */}
-              <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-sm space-y-4">
-                <h3 className="font-heading text-base font-bold text-[#111111]">
-                  Atelier Database Controls
-                </h3>
-                <p className="text-xs font-body text-[#6F6F6F]">
-                  Re-seed initial catalog items and standard adverts into MongoDB.
-                </p>
+              {/* 2. Store Availability & Maintenance Mode */}
+              <div className="p-6 sm:p-7 rounded-3xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-sm space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-[#111111] text-[#FFCB74] flex items-center justify-center border border-[#2F2F2F] shrink-0">
+                      <Wrench className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-heading text-base font-bold text-[#111111]">
+                          Store Maintenance Mode
+                        </h3>
+                        <Badge
+                          variant="outline"
+                          className={
+                            maintenanceMode
+                              ? 'bg-amber-50 text-amber-800 border-amber-300 font-mono text-[10px] font-bold'
+                              : 'bg-emerald-50 text-emerald-800 border-emerald-300 font-mono text-[10px] font-bold'
+                          }
+                        >
+                          {maintenanceMode ? '⚠️ MAINTENANCE ACTIVE' : '● STORE IS LIVE'}
+                        </Badge>
+                      </div>
+                      <p className="text-xs font-body text-[#6F6F6F] mt-0.5">
+                        Controls public accessibility of the shop catalog.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 self-end sm:self-auto">
+                    <span className="text-xs font-mono font-bold uppercase text-[#6F6F6F]">
+                      {maintenanceMode ? 'Maintenance On' : 'Store Live'}
+                    </span>
+                    <button
+                      onClick={() => handleToggleMaintenance(!maintenanceMode)}
+                      disabled={savingSettings}
+                      className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        maintenanceMode ? 'bg-[#FFCB74]' : 'bg-[#E5E5E5]'
+                      }`}
+                      role="switch"
+                      aria-checked={maintenanceMode}
+                      title={maintenanceMode ? 'Turn maintenance off' : 'Turn maintenance on'}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-[#FFFFFF] shadow-md ring-0 transition duration-200 ease-in-out ${
+                          maintenanceMode ? 'translate-x-7' : 'translate-x-0'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Apology Notice Box */}
+                <div className="space-y-2 pt-3 border-t border-[#E5E5E5]">
+                  <label className="text-[11px] font-mono uppercase tracking-wider text-[#2F2F2F] font-semibold flex items-center gap-1.5">
+                    <MessageSquare className="w-3.5 h-3.5 text-[#111111]" />
+                    Customer Apology &amp; Downtime Notice Message
+                  </label>
+                  <Textarea
+                    rows={2}
+                    value={maintenanceMsg}
+                    onChange={(e) => setMaintenanceMsg(e.target.value)}
+                    placeholder="Enter the message displayed to users when shop is in maintenance mode..."
+                    className="bg-[#F6F6F6] border-[#E5E5E5] rounded-xl text-xs font-body leading-relaxed"
+                  />
+                  <div className="flex justify-end pt-1">
+                    <Button
+                      onClick={handleSaveMaintenanceMsg}
+                      disabled={savingSettings}
+                      className="bg-[#111111] hover:bg-[#2F2F2F] text-[#FFFFFF] font-heading text-xs uppercase tracking-wider font-bold rounded-xl h-10 px-5 shadow-sm"
+                    >
+                      {savingSettings ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> Saving...
+                        </>
+                      ) : (
+                        'Save Notice'
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Admin Security & Account Credentials */}
+              <div className="p-6 sm:p-7 rounded-3xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-sm space-y-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-[#111111] text-[#FFCB74] flex items-center justify-center border border-[#2F2F2F] shrink-0">
+                      <Lock className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-heading text-base font-bold text-[#111111]">
+                        Admin Security &amp; Credentials
+                      </h3>
+                      <p className="text-xs font-mono text-[#6F6F6F]">
+                        Update administrator username and access password
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowCredPasswords(!showCredPasswords)}
+                    className="text-xs font-mono text-[#6F6F6F] hover:text-[#111111] flex items-center gap-1.5 transition-colors"
+                  >
+                    {showCredPasswords ? (
+                      <>
+                        <EyeOff className="w-3.5 h-3.5" />
+                        <span>Hide</span>
+                      </>
+                    ) : (
+                      <>
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>Show</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <form onSubmit={handleUpdateCredentials} className="space-y-4 pt-1">
+                  {/* Current Password Field */}
+                  <div className="p-4 rounded-2xl bg-[#F6F6F6] border border-[#E5E5E5] space-y-1.5">
+                    <label className="text-[11px] font-mono uppercase tracking-wider text-[#111111] font-bold flex items-center gap-1.5">
+                      <Lock className="w-3.5 h-3.5 text-[#111111]" /> Current Password * (Verification)
+                    </label>
+                    <Input
+                      type={showCredPasswords ? 'text' : 'password'}
+                      autoComplete="current-password"
+                      value={credCurrentPassword}
+                      onChange={(e) => setCredCurrentPassword(e.target.value)}
+                      placeholder="Enter current password to authorize changes"
+                      required
+                      className="bg-[#FFFFFF] border-[#E5E5E5] rounded-xl h-11 text-xs sm:text-sm font-mono"
+                    />
+                  </div>
+
+                  {/* New Credentials Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-mono uppercase tracking-wider text-[#2F2F2F] font-semibold flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-[#111111]" /> New Username
+                      </label>
+                      <Input
+                        type="text"
+                        autoComplete="username"
+                        value={credNewUsername}
+                        onChange={(e) => setCredNewUsername(e.target.value)}
+                        placeholder="e.g. admin"
+                        className="bg-[#F6F6F6] border-[#E5E5E5] rounded-xl h-11 text-xs sm:text-sm font-mono"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-mono uppercase tracking-wider text-[#2F2F2F] font-semibold flex items-center gap-1.5">
+                        <Lock className="w-3.5 h-3.5 text-[#111111]" /> New Password
+                      </label>
+                      <Input
+                        type={showCredPasswords ? 'text' : 'password'}
+                        autoComplete="new-password"
+                        value={credNewPassword}
+                        onChange={(e) => setCredNewPassword(e.target.value)}
+                        placeholder="Min. 6 characters"
+                        className="bg-[#F6F6F6] border-[#E5E5E5] rounded-xl h-11 text-xs sm:text-sm font-mono"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-mono uppercase tracking-wider text-[#2F2F2F] font-semibold flex items-center gap-1.5">
+                        <Lock className="w-3.5 h-3.5 text-[#111111]" /> Confirm Password
+                      </label>
+                      <Input
+                        type={showCredPasswords ? 'text' : 'password'}
+                        autoComplete="new-password"
+                        value={credConfirmPassword}
+                        onChange={(e) => setCredConfirmPassword(e.target.value)}
+                        placeholder="Repeat new password"
+                        className="bg-[#F6F6F6] border-[#E5E5E5] rounded-xl h-11 text-xs sm:text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Feedback Messages */}
+                  {credError && (
+                    <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{credError}</span>
+                    </div>
+                  )}
+
+                  {credSuccess && (
+                    <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs">
+                      <CheckCircle2 className="w-4 h-4 shrink-0" />
+                      <span>{credSuccess}</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-end pt-1">
+                    <Button
+                      type="submit"
+                      disabled={savingCreds}
+                      className="bg-[#111111] hover:bg-[#2F2F2F] text-[#FFFFFF] font-heading text-xs uppercase tracking-wider font-bold rounded-xl h-11 px-6 shadow-sm"
+                    >
+                      {savingCreds ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin mr-2" /> Updating...
+                        </>
+                      ) : (
+                        'Save Credentials'
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+
+              {/* 4. Atelier Database & Maintenance Tools */}
+              <div className="p-6 sm:p-7 rounded-3xl bg-[#FFFFFF] border border-[#E5E5E5] shadow-sm space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#F6F6F6] text-[#111111] flex items-center justify-center border border-[#E5E5E5] shrink-0">
+                      <RefreshCw className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-heading text-base font-bold text-[#111111]">
+                        Database &amp; Catalog Tools
+                      </h3>
+                      <p className="text-xs font-body text-[#6F6F6F]">
+                        Synchronize catalog products and standard promotional banners.
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
                 <div className="pt-2 flex flex-wrap gap-3">
                   <Button
@@ -1436,15 +1839,15 @@ export default function AdminDashboardClient() {
                         showToast('Error seeding database');
                       }
                     }}
-                    className="bg-[#111111] hover:bg-[#2F2F2F] text-[#FFFFFF] font-mono text-xs uppercase"
+                    className="bg-[#111111] hover:bg-[#2F2F2F] text-[#FFFFFF] font-mono text-xs uppercase rounded-xl h-11 px-5"
                   >
-                    <RefreshCw className="w-3.5 h-3.5 mr-2 text-[#FFCB74]" /> Re-Seed 18 Products
+                    <RefreshCw className="w-3.5 h-3.5 mr-2 text-[#FFCB74]" /> Re-Seed 18 Garments
                   </Button>
 
                   <Button
                     onClick={fetchAdverts}
                     variant="outline"
-                    className="border-[#E5E5E5] text-[#111111] font-mono text-xs uppercase"
+                    className="border-[#E5E5E5] text-[#111111] font-mono text-xs uppercase rounded-xl h-11 px-5"
                   >
                     <RefreshCw className="w-3.5 h-3.5 mr-2" /> Sync Adverts
                   </Button>
